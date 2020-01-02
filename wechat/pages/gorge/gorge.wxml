@@ -1,0 +1,13 @@
+<!--pages/gorge/gorge.wxml-->
+<view class="page">
+    <view class="page__hd">
+        <view class="page__title">{{title}}</view>
+        <view class="page__desc">{{show}}</view>
+    </view>
+    <view id="recipe" hidden="{{recipe.display}}">
+      
+    </view>
+    <view class="page__ft">
+        <image src="../../images/icon_footer.png" style="width: 160px; height: 35px;"></image>
+    </view>
+</view>
