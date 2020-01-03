@@ -28,6 +28,8 @@
         </view>
     </view>
     <view class="page__ft">
-        <image src="../../images/icon_footer.png" style="width: 160px; height: 35px;"></image>
+        <view class="weui-footer weui-footer_fixed-bottom">
+            <image src="../../images/icon_footer.png" style="width: 160px; height: 35px;"></image>
+        </view>
     </view>
 </view>
