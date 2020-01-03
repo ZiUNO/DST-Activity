@@ -1,6 +1,7 @@
+import json
 import os
 
-from activities.gorge import recipe, download_recipe
+from activities.gorge import recipe, download_recipe, js
 
 if __name__ == '__main__':
     wechat_path = os.path.join('wechat')

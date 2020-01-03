@@ -20,7 +20,7 @@ Page({
     recipe: {
       name: '食谱',
       display: false,
-      content: []
+      content: %s
     }
   },
 
@@ -168,28 +168,35 @@ def download_recipe(recipe, wechat_path):
     images_dict = {}
     for index, item in enumerate(recipe):
         food = item[1]
-        cook = item[4]
-        gift = item[5]
-        silver_gift = item[6]
+        kitchen = item[4]
+        reward = item[5]
+        silver_reward = item[6]
         formula = item[7]
         images_dict[food[0]] = food[1]
         item[1] = '../../images/%s' % food[0]
-        for idx, c in enumerate(cook):
+        for idx, c in enumerate(kitchen):
             if not isinstance(c, str):
                 images_dict[c[0]] = c[1]
-                cook[idx][0] = '../../images/%s' % c[0]
-                del cook[idx][1]
-        item[4] = cook
-        for idx, one_gift in enumerate(gift):
+                kitchen[idx][0] = '../../images/%s' % c[0]
+                del kitchen[idx][1]
+        tmp_kitchen = []
+        _ = [tmp_kitchen.append({"kitchen_url": kitchen[idx][0], "kitchen_text": kitchen[idx + 1]}) for idx in
+             range(0, len(kitchen), 2)]
+        item[4] = tmp_kitchen
+        for idx, one_gift in enumerate(reward):
             images_dict[one_gift[1]] = one_gift[2]
-            gift[idx][1] = '../../images/%s' % one_gift[1]
-            del gift[idx][2]
-        item[5] = gift
-        for idx, one_gift in enumerate(silver_gift):
+            reward[idx][1] = '../../images/%s' % one_gift[1]
+            del reward[idx][2]
+        tmp_reward = []
+        _ = [tmp_reward.append({"quantity": int(rew[0]), "coin": rew[1]}) for rew in reward]
+        item[5] = tmp_reward
+        for idx, one_gift in enumerate(silver_reward):
             images_dict[one_gift[1]] = one_gift[2]
-            silver_gift[idx][1] = '../../images/%s' % one_gift[1]
-            del silver_gift[idx][2]
-        item[6] = silver_gift
+            silver_reward[idx][1] = '../../images/%s' % one_gift[1]
+            del silver_reward[idx][2]
+        tmp_silver_reward = []
+        _ = [tmp_silver_reward.append({"quantity": int(rew[0]), "coin": rew[1]}) for rew in silver_reward]
+        item[6] = tmp_silver_reward
         for line in formula:
             for idx, tmp in enumerate(line):
                 if isinstance(tmp, str):
@@ -200,6 +207,24 @@ def download_recipe(recipe, wechat_path):
                     del line[idx][1]
                 else:
                     raise ValueError(tmp)
+        tmp_formula = []
+        for line in formula:
+            tmp_line = []
+            for one in line:
+                tmp_dict = {}
+                if isinstance(one, list):
+                    if len(one) == 2:
+                        tmp_dict['formula_url'] = one[0]
+                        tmp_dict['formula_quantity'] = one[1]
+                    elif len(one) == 1:
+                        tmp_dict['formula_url'] = one[0]
+                    else:
+                        raise ValueError
+                    tmp_line.append(tmp_dict)
+                elif isinstance(one, str):
+                    tmp_line.append({'text': one})
+            tmp_formula.append(tmp_line)
+        item[7] = tmp_formula
         recipe[index] = item
     download_images(images_dict, wechat_path)
     handled_recipe = []
