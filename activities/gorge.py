@@ -20,7 +20,8 @@ Page({
     recipe: {
       name: '食谱',
       display: false,
-      content: %s
+      content: %s,
+      satisfy_map: %s
     }
   },
 
@@ -241,3 +242,21 @@ def download_recipe(recipe, wechat_path):
         }
     ) for item in recipe]
     return handled_recipe
+
+
+def satisfy_map(handled_recipe):
+    recipe_satisfy_map = {}
+    keys = []
+    for recipe in handled_recipe:
+        keys += recipe["satisfy"]
+    keys = list(set(keys))
+    keys.insert(0, '全部')
+    for key in keys:
+        recipe_satisfy_map[key] = []
+    recipe_satisfy_map['全部'] = [i for i in range(len(handled_recipe))]
+    for index, recipe in enumerate(handled_recipe):
+        for satis in recipe["satisfy"]:
+            recipe_satisfy_map[satis].append(index)
+    result = [{'satisfy': key, 'ids': recipe_satisfy_map[key], 'show': 'false'} for key in recipe_satisfy_map]
+    result[0]['show'] = 'true'
+    return result
