@@ -15,13 +15,14 @@ Page({
    * 页面的初始数据
    */
   data: {
+    istrue: false,
     title: '暴食',
     show: '',
     recipe: {
       name: '食谱',
       display: false,
       content: %s,
-      satisfy_map: %s
+      satisfyMap: %s
     }
   },
 
@@ -34,57 +35,29 @@ Page({
       id: true,
       show: this.data[options.show].name
     })
-
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  openDialog: function () {
+    this.setData({
+        istrue: true
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+  closeDialog: function () {
+    this.setData({
+        istrue: false
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
+  recipeChange: function (event) {
+    let tapId = event.currentTarget.id
+    let satisfyMap = this.data.recipe.satisfyMap
+    for (let i = 0, len = satisfyMap.length; i<len;++i){
+      satisfyMap[i]['show'] = false
+    }
+    satisfyMap[tapId]['show'] = true
+    this.setData({
+      'recipe.satisfyMap': satisfyMap
+    })
+    this.closeDialog()
+  } 
 })
 '''
 
