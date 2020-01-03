@@ -158,6 +158,7 @@ def download_recipe(recipe, wechat_path):
              range(0, len(kitchen), 2)]
         item[4] = tmp_kitchen
         for idx, one_gift in enumerate(reward):
+            one_gift[1] = re.sub("%", '', one_gift[1])
             images_dict[one_gift[1]] = one_gift[2]
             reward[idx][1] = '../../images/%s' % one_gift[1]
             del reward[idx][2]
@@ -165,6 +166,7 @@ def download_recipe(recipe, wechat_path):
         _ = [tmp_reward.append({"quantity": int(rew[0]), "coin": rew[1]}) for rew in reward]
         item[5] = tmp_reward
         for idx, one_gift in enumerate(silver_reward):
+            one_gift[1] = re.sub("%", '', one_gift[1])
             images_dict[one_gift[1]] = one_gift[2]
             silver_reward[idx][1] = '../../images/%s' % one_gift[1]
             del silver_reward[idx][2]
