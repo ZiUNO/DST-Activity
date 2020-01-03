@@ -6,6 +6,8 @@ from time import sleep
 from requests import get, ReadTimeout
 from urllib3.exceptions import ReadTimeoutError
 
+from . import download_images
+
 js = '''
 Page({
 
@@ -107,7 +109,8 @@ def recipe():
             continue
         break
     content = re.findall('<tr>(.*?)</tr>', html, re.S)
-    content = [re.findall(u'<td>.*?data-image-key="(.*?)".*?data-src="(.*?)".*?</td>'  # 食物 key url
+    content = [re.findall(u'<td>([0-9]*)</td>'  # #
+                          u'<td>.*?data-image-key="(.*?)".*?data-src="(.*?)".*?</td>'  # 食物 key url
                           u'<td>(.*?)</td>'  # 名称
                           u'<td>(.*?)</td>'  # 满足要求
                           u'<td>.*?data-image-key="(.*?)".*?data-src="(.*?)".*?<br />(.*?)</td>'  # 炊具
@@ -117,24 +120,30 @@ def recipe():
                           u'', s, re.S)[0] for s in content]
     for index, item in enumerate(content):
         item = list(item)
-        item[3] = [re.sub(u"<.*?>", "", i) for i in item[3].split(',')]
-        item[0] = [item[0], item[1]]
-        item[4] = [[item[4], item[5]], item[6]]
-        del item[6], item[5], item[1]
-        item[3][1] = item[3][1].strip()
-        item[4] = re.findall(u'([0-9]*?)&#215;.*?data-image-key="(.*?)".*?data-src="(.*?)"', item[4], re.S)
-        item[4] = [list(tmp) for tmp in item[4]]
+        item[4] = [re.sub(u"<.*?>", "", i) for i in item[4].split(',')]
+        item[1] = [item[1], item[2]]
+        item[5] = [[item[5], item[6]], item[7]]
+        del item[7], item[6], item[2]
+        item[4][1] = item[4][1].strip()
+        second_item = item[4][1]
+        if second_item.count('<br />') != 0:
+            second_item = re.split('(^.*?)<br /><a .*?data-image-key="(.*?)".*?data-src="(.*?)".*?<br />(.*)$',
+                                   second_item)
+            second_item = [s for s in second_item if s != '']
+            item[4] = [item[4][0], second_item[0], second_item[1:-1], second_item[-1]]
         item[5] = re.findall(u'([0-9]*?)&#215;.*?data-image-key="(.*?)".*?data-src="(.*?)"', item[5], re.S)
         item[5] = [list(tmp) for tmp in item[5]]
-        item[6] = item[6].split('<br />')
-        item[6] = [i.strip() for i in item[6]]
-        item[6] = [re.split(u'<a .*?data-image-key="(.*?)".*?data-src="(.*?)".*?</a>', s)
-                   for s in item[6]]
-        item[6] = [[re.sub('<.*?>', '', re.sub('&#215;', '', i)) for i in s if i != ''] for s in item[6]]
-        tmp_item_6 = []
-        for tmp_index, tmp in enumerate(item[6]):
+        item[6] = re.findall(u'([0-9]*?)&#215;.*?data-image-key="(.*?)".*?data-src="(.*?)"', item[6], re.S)
+        item[6] = [list(tmp) for tmp in item[6]]
+        item[7] = item[7].split('<br />')
+        item[7] = [i.strip() for i in item[7]]
+        item[7] = [re.split(u'<a .*?data-image-key="(.*?)".*?data-src="(.*?)".*?</a>', s)
+                   for s in item[7]]
+        item[7] = [[re.sub('<.*?>', '', re.sub('&#215;', '', i)) for i in s if i != ''] for s in item[7]]
+        tmp_item_7 = []
+        for tmp_index, tmp in enumerate(item[7]):
             i = 0
-            tmp_item_6_line = []
+            tmp_item_7_line = []
             while i < len(tmp):
                 if tmp[i].endswith('.png') and tmp[i + 1].startswith('https') and tmp[i + 2].isdigit():
                     one = [tmp[i], tmp[i + 1], tmp[i + 2]]
@@ -145,13 +154,65 @@ def recipe():
                 else:
                     one = tmp[i]
                     i += 1
-                tmp_item_6_line.append(one)
-            tmp_item_6.append(tmp_item_6_line)
-        item[6] = tmp_item_6
+                tmp_item_7_line.append(one)
+            tmp_item_7.append(tmp_item_7_line)
+        item[7] = tmp_item_7
         content[index] = item
-    for i, item in enumerate(content):
-        print(i, item)
+    tmp = {c[0]: c for c in content}
+    content = list(tmp.values())
+    content = sorted(content, key=lambda x: int(x[0]))
+    return content
 
 
-if __name__ == '__main__':
-    recipe()
+def download_recipe(recipe, wechat_path):
+    images_dict = {}
+    for index, item in enumerate(recipe):
+        food = item[1]
+        cook = item[4]
+        gift = item[5]
+        silver_gift = item[6]
+        formula = item[7]
+        images_dict[food[0]] = food[1]
+        item[1] = '../../images/%s' % food[0]
+        for idx, c in enumerate(cook):
+            if not isinstance(c, str):
+                images_dict[c[0]] = c[1]
+                cook[idx][0] = '../../images/%s' % c[0]
+                del cook[idx][1]
+        item[4] = cook
+        for idx, one_gift in enumerate(gift):
+            images_dict[one_gift[1]] = one_gift[2]
+            gift[idx][1] = '../../images/%s' % one_gift[1]
+            del gift[idx][2]
+        item[5] = gift
+        for idx, one_gift in enumerate(silver_gift):
+            images_dict[one_gift[1]] = one_gift[2]
+            silver_gift[idx][1] = '../../images/%s' % one_gift[1]
+            del silver_gift[idx][2]
+        item[6] = silver_gift
+        for line in formula:
+            for idx, tmp in enumerate(line):
+                if isinstance(tmp, str):
+                    continue
+                elif isinstance(tmp, list):
+                    images_dict[tmp[0]] = tmp[1]
+                    line[idx][0] = '../../images/%s' % tmp[0]
+                    del line[idx][1]
+                else:
+                    raise ValueError(tmp)
+        recipe[index] = item
+    download_images(images_dict, wechat_path)
+    handled_recipe = []
+    _ = [handled_recipe.append(
+        {
+            'id': item[0],
+            'food_url': item[1],
+            'name': item[2],
+            'satisfy': item[3],
+            'kitchen': item[4],
+            'reward': item[5],
+            'silver_reward': item[6],
+            'formula': item[7]
+        }
+    ) for item in recipe]
+    return handled_recipe
