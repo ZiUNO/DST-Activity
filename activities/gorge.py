@@ -8,7 +8,7 @@ from urllib3.exceptions import ReadTimeoutError
 
 from . import download_images
 
-js = '''
+js = '''// pages/gorge/gorge.js
 Page({
 
   /**
@@ -220,9 +220,9 @@ def download_recipe(recipe, wechat_path):
                         tmp_dict['formula_url'] = one[0]
                     else:
                         raise ValueError
-                    tmp_line.append(tmp_dict)
+                    tmp_line.append({"kind": "formula", "content": tmp_dict})
                 elif isinstance(one, str):
-                    tmp_line.append({'text': one})
+                    tmp_line.append({"kind": "text", 'content': one})
             tmp_formula.append(tmp_line)
         item[7] = tmp_formula
         recipe[index] = item
