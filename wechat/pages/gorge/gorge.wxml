@@ -22,12 +22,24 @@
 
                             <view class="weui-media-box__desc">
                                 <view class="weui-cell weui-cell_example ">
-                                    <view class="weui-cell__hd">
-                                        <image src="../../images/Berries.png"
-                                               style="vertical-align: middle;width:20px; height: 20px;"></image>
-                                        标题文字
+                                    <view id="formula" class="weui-cell__bd" style="flex-direction: row;">
+                                        <view wx:for="{{recipe.content[idx].formula}}"
+                                              wx:key="{{index}}" wx:for-item="line">
+                                            <view wx:for="{{line}}" wx:key="{{index}}" wx:for-item="oneFormula" style="display: inline-block;">
+                                                <view wx:if="{{oneFormula.kind=='formula'}}" style="display: inline-block;">
+                                                    <image src="{{oneFormula.content.formula_url}}"
+                                                           style="vertical-align: middle;width:20px; height: 20px;"></image>
+                                                    <text decode="{{true}}">&nbsp;</text>
+                                                    {{oneFormula.content.formula_quantity}}
+                                                    <text decode="{{true}}">&nbsp;</text>
+                                                </view>
+                                                <view wx:else style="display: inline-block;">
+                                                    {{oneFormula.content}}
+                                                </view>
+                                            </view>
+
+                                        </view>
                                     </view>
-                                    <view class="weui-cell__bd"></view>
                                     <view class="weui-cell__ft" style="flex-direction: row;">
                                         <view id="reward" style="display: flex;">
                                             <view wx:for="{{recipe.content[idx].reward}}"
