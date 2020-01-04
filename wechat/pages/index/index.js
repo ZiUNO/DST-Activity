@@ -6,13 +6,12 @@ Page({
    */
   data: {
     list: [
-      {
-        id: 'forge',
-        name: '熔炉',
-        open: false,
-        pages: []
-        // pages: ['button', 'list', 'slideview', 'input', 'form', 'slider', 'uploader']
-      },
+      // {
+      //   id: 'forge',
+      //   name: '熔炉',
+      //   open: false,
+      //   pages: []
+      // },
       {
         id: 'gorge',
         name: '暴食',
@@ -22,7 +21,7 @@ Page({
             name: '食谱',
             path: '../gorge/gorge?show=recipe'
           }
-          ]
+        ]
       }
     ]
   },
