@@ -6,7 +6,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "DST Activity",
+    "navigationBarTitleText": "DST Events",
     "navigationBarTextStyle": "black"
   },
   "style": "v2",

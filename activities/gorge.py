@@ -235,3 +235,129 @@ def satisfy_map(handled_recipe):
     result = [{'satisfy': key, 'ids': recipe_satisfy_map[key], 'show': 'false'} for key in recipe_satisfy_map]
     result[0]['show'] = 'true'
     return result
+
+
+translation_dict = {
+    'recipe': {
+        'name': {
+            'Loaf of Bread': '条状面包',
+            'Potato Chips': '薯片',
+            'Vegetable Soup': '蔬菜汤',
+            'Jelly Sandwich': '果冻三明治',
+            'Fish Stew': '炖鱼',
+            'Turnip Cake': '萝卜蛋糕',
+            'Potato Pancakes': '土豆煎饼',
+            'Potato Soup': '土豆汤',
+            'Fishball Skewers': '鱼丸串',
+            'Meatballs': '肉丸',
+            'Meat Skewers': '肉串',
+            'Stone Soup': '石头汤',
+            'Croquette': '炸丸子',
+            'Roast Vegetables': '烤蔬菜',
+            'Meatloaf': '肉饼',
+            'Carrot Soup': '胡萝卜汤',
+            'Fish Pie': '鲜鱼派',
+            'Fish and Chips': '炸鱼薯条',
+            'Meat Pie': '肉派',
+            'Sliders': '小汉堡',
+            'Fist Full of Jam': '满满的果酱',
+            'Jelly Roll': '果冻卷',
+            'Carrot Cake': '胡萝卜蛋糕',
+            'Garlic Mashed Potatoes': '蒜香土豆泥',
+            'Garlic Bread': '蒜香面包',
+            'Tomato Soup': '番茄汤',
+            'Sausage': '肉肠',
+            'Candied Fish': '糖煮鱼',
+            'Stuffed Mushroom': '蘑菇馅饼',
+            'Ratatouille': '蔬菜杂烩',
+            'Bruschetta': '意大利烤面包片',
+            'Meat Stew': '肉汤',
+            'Hamburger': '汉堡',
+            'Fish Burger': '鱼汉堡',
+            'Mushroom Burger': '蘑菇汉堡',
+            'Fish Steak': '鱼排',
+            'Curry': '咖喱',
+            'Spaghetti and Meatball': '肉丸意大利面',
+            'Lasagna': '千层面',
+            'Poached Fish': '水煮鱼',
+            'Shepherds Pie': '牧羊人的馅饼',
+            'Candy': '拐棍糖',
+            'Bread Pudding': '布丁',
+            'Waffles': '华夫饼',
+            'Berry Tart': '浆果馅饼',
+            'Macaroni and Cheese': '芝士通心粉',
+            'Bagel and Fish': '硬面包圈夹鱼',
+            'Grilled Cheese': '烤奶酪',
+            'Cream of Mushroom': '奶油蘑菇汤',
+            'Pierogies': '饺子形馅饼',
+            'Manicotti': '番茄沙司烙通心粉',
+            'Cheeseburger': '芝士汉堡',
+            'Creamy Fettuccine': '奶油意大利宽面',
+            'Onion Soup': '洋葱汤',
+            'Breaded Cutlet': '面包屑炸鱼排',
+            'Creamy Fish': '奶油烤鱼',
+            'Pizza': '披萨',
+            'Pot Roast': '炖肉',
+            'Crab Cake': '蟹肉蛋糕',
+            'Steak Frites': '牛排薯条',
+            'Shooter Sandwich': '射击三明治',
+            'Bacon Wrapped Meat': '培根裹肉',
+            'Crab Roll': '蟹肉卷',
+            'Meat Wellington': '威灵顿肉排',
+            'Crab Ravioli': '意式蟹肉云吞',
+            'Caramel Cube': '方形焦糖',
+            'Scone': '司康',
+            'Trifle': '松糕',
+            '芝士蛋糕': '芝士蛋糕',
+            'Syrup': '糖浆'
+        },
+        'satisfy': {
+            '全部': '全部',
+            '汤': '汤类',
+            '意面': '意面',
+            'None': '其他',
+            '甜点': '甜点',
+            'Meat': '肉类',
+            '面包': '面包',
+            '奶酪': '奶酪',
+            '蔬菜': '素食',
+            'Fish': '鱼类',
+            '零食': '零食'
+        },
+        'formula': {
+            'or': '或',
+            'a': '一个',
+            'different': '不同的',
+            'vegetable': '蔬菜',
+            'except': '除了',
+            'no': '没有',
+            'duplicates': '重复',
+            'duplicate': '重复',
+            'of': '',
+            'previous': '前面的',
+            'ingredient': '素材'
+        }
+    }
+}
+kinds = ['recipe']
+
+
+def translate(gorge_data, kind):
+    assert kind in kinds
+    if kind == 'recipe':
+        formula_keys = list(translation_dict[kind]['formula'].keys())
+        for index, item in enumerate(gorge_data):
+            item['name'] = translation_dict[kind]['name'][item['name']]
+            item['satisfy'] = [translation_dict[kind]['satisfy'][sa] for sa in item['satisfy']]
+
+            formula = item['formula']
+            for idx, line in enumerate(formula):
+                for x, one in enumerate(line):
+                    if one['kind'] == 'text':
+                        text = one['content']
+                        text = re.split(u'(\(|\))|\s', text)
+                        text = [t for t in text if t not in [None, '']]
+                        text = ''.join([translation_dict[kind]['formula'][t] if t in formula_keys else t for t in text])
+                        line[x]['content'] = text
+                formula[idx] = line
+    return gorge_data

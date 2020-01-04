@@ -1,17 +1,16 @@
 <!--pages/index/index.wxml-->
 <view class="page">
     <view class="page__hd">
-        <view class="page__title">[DST] 活动 百科</view>
-        <view class="page__desc">Don't Starve Together Activity
-        百科</view>
+        <view class="page__title">[DST-Events] 图鉴</view>
+        <view class="page__desc">Don't Starve Together Event</view>
     </view>
     <view class="page__bd page__bd_spacing">
         <view class="kind-list">
             <block wx:for="{{list}}" wx:key="id">
-                <view class="kind-list__item" style="border-radius: 40rpx;">
+                <view class="kind-list__item" style="border-radius: 20rpx;">
                     <view id="{{item.id}}" class="weui-flex kind-list__item-hd {{item.open ? 'kind-list__item-hd_show' : ''}}" bindtap="kindToggle">
                         <view class="weui-flex__item">{{item.name}}</view>
-                        <image class="kind-list__img" style="border-style: solid; border-radius: 21rpx;" src="../../images/event_{{item.id}}.png"></image>
+                        <image class="kind-list__img" style="border-style: solid; border-radius: 10rpx;" src="../../images/event_{{item.id}}.png"></image>
                     </view>
                     <view class="kind-list__item-bd {{item.open ? 'kind-list__item-bd_show' : ''}}">
                         <view class="weui-cells {{item.open ? 'weui-cells_show' : ''}}">
