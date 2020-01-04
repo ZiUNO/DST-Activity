@@ -18,30 +18,39 @@
                             <image class="weui-media-box__thumb" src="{{recipe.content[idx].food_url}}"/>
                         </view>
                         <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                            <view class="weui-media-box__title"><view style="display: inline-block;">{{recipe.content[idx].name}}<text decode="{{true}}">&emsp;</text></view><image wx:for="{{recipe.content[idx].kitchen}}" wx:key="{{index}}" src="{{item.kitchen_url}}" style="display: inline-block; vertical-align: middle;width:23px; height: 23px;"></image></view>
+                            <view class="weui-media-box__title">
+                                <view style="display: inline-block;">{{recipe.content[idx].name}}
+                                    <text decode="{{true}}">&emsp;</text>
+                                </view>
+                                <image wx:for="{{recipe.content[idx].kitchen}}" wx:key="{{index}}"
+                                       src="{{item.kitchen_url}}"
+                                       style="float: right; display: inline-block; vertical-align: middle;width:23px; height: 23px; margin-right: 45px;"></image>
+                            </view>
 
                             <view class="weui-media-box__desc">
-                                <view class="weui-cell weui-cell_example ">
-                                    <view id="formula" class="weui-cell__bd" style="flex-direction: row;">
+                                <view class="weui-cell weui-cell_example" style="padding-bottom: 0; padding-top: 0;">
+                                    <view id="formula" class="weui-cell__bd">
                                         <view wx:for="{{recipe.content[idx].formula}}"
-                                              wx:key="{{index}}" wx:for-item="line">
-                                            <view wx:for="{{line}}" wx:key="{{index}}" wx:for-item="oneFormula" style="display: inline-block;">
-                                                <view wx:if="{{oneFormula.kind=='formula'}}" style="display: inline-block;">
+                                              wx:key="{{index}}" wx:for-item="line" style="text-align: center;">
+                                            <view wx:for="{{line}}" wx:key="{{index}}" wx:for-item="oneFormula"
+                                                  style="display: inline-block;">
+                                                <view wx:if="{{oneFormula.kind=='formula'}}"
+                                                      style="display: inline-block;">
                                                     <image src="{{oneFormula.content.formula_url}}"
                                                            style="vertical-align: middle;width:20px; height: 20px;"></image>
-                                                    <text decode="{{true}}">&nbsp;</text>
                                                     {{oneFormula.content.formula_quantity}}
-                                                    <text decode="{{true}}">&nbsp;</text>
                                                 </view>
                                                 <view wx:else style="display: inline-block;">
                                                     {{oneFormula.content}}
                                                 </view>
                                             </view>
-
                                         </view>
                                     </view>
-                                    <view class="weui-cell__ft" style="flex-direction: row;">
-                                        <view id="reward" style="display: flex;">
+                                    <view class="weui-cell__ft" style="display: flex;">
+                                        <view id="reward" style="display: flex; flex-direction: column;">
+                                            <text style="color: #888888; text-align: center;"
+                                                  wx:if="{{recipe.content[idx].reward.length != 0}}">普
+                                            </text>
                                             <view wx:for="{{recipe.content[idx].reward}}"
                                                   wx:key="{{index}}" wx:for-item="oneReward">
                                                 <image src="{{oneReward.coin}}"
@@ -51,7 +60,10 @@
 
                                             </view>
                                         </view>
-                                        <view id="silverReward" style="display: flex;">
+                                        <view id="silverReward" style="display: flex; flex-direction: column;">
+                                            <text style="color: #888888; text-align: center;"
+                                                  wx:if="{{recipe.content[idx].silver_reward.length != 0}}">银
+                                            </text>
                                             <view wx:for="{{recipe.content[idx].silver_reward}}"
                                                   wx:key="{{index}}" wx:for-item="oneReward">
                                                 <image src="{{oneReward.coin}}"
