@@ -1958,27 +1958,28 @@ Page({
                 satisfy: '零食',
                 ids: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 15, 19, 20, 23, 24, 25, 26, 27, 28, 30, 46, 47, 48, 53, 58],
                 show: false
+            }, {
+                satisfy: '肉类',
+                ids: [9, 10, 14, 18, 19, 26, 31, 32, 36, 37, 38, 40, 51, 54, 56, 57, 59, 60, 61, 63],
+                show: false
+            }, {satisfy: '甜点', ids: [20, 21, 22, 41, 42, 43, 44, 65, 66, 67, 68], show: false}, {
+                satisfy: '意面',
+                ids: [37, 38, 45, 50, 52, 64],
+                show: false
             }, {satisfy: '汤类', ids: [2, 4, 7, 11, 15, 25, 31, 36, 48, 53], show: false}, {
-                satisfy: '其他',
-                ids: [69],
+                satisfy: '奶酪',
+                ids: [45, 47, 48, 49, 50, 51, 56, 64, 68],
                 show: false
             }, {
                 satisfy: '素食',
                 ids: [1, 2, 5, 6, 7, 12, 13, 15, 23, 25, 28, 29, 30, 34, 48, 49, 53],
                 show: false
-            }, {
-                satisfy: '肉类',
-                ids: [9, 10, 14, 18, 19, 26, 31, 32, 36, 37, 38, 40, 51, 54, 56, 57, 59, 60, 61, 63],
-                show: false
-            }, {satisfy: '奶酪', ids: [45, 47, 48, 49, 50, 51, 56, 64, 68], show: false}, {
-                satisfy: '甜点',
-                ids: [20, 21, 22, 41, 42, 43, 44, 65, 66, 67, 68],
-                show: false
             }, {satisfy: '鱼类', ids: [4, 8, 16, 17, 27, 33, 35, 39, 46, 55], show: false}, {
-                satisfy: '意面',
-                ids: [37, 38, 45, 50, 52, 64],
+                satisfy: '面包',
+                ids: [0, 3, 19, 24, 30, 32, 33, 34, 46, 47, 51, 60, 62, 66],
                 show: false
-            }, {satisfy: '面包', ids: [0, 3, 19, 24, 30, 32, 33, 34, 46, 47, 51, 60, 62, 66], show: false}]
+            }, {satisfy: '其他', ids: [69], show: false}],
+            index: 0
         }
     },
 
@@ -1992,18 +1993,11 @@ Page({
             show: this.data[options.show].name
         })
     },
-    openDialog: function () {
+    bindPickerChange: function (e) {
         this.setData({
-            istrue: true
+            'recipe.index': e.detail.value
         })
-    },
-    closeDialog: function () {
-        this.setData({
-            istrue: false
-        })
-    },
-    recipeChange: function (event) {
-        let tapId = event.currentTarget.id
+        let tapId = e.detail.value
         let satisfyMap = this.data.recipe.satisfyMap
         for (let i = 0, len = satisfyMap.length; i < len; ++i) {
             satisfyMap[i]['show'] = false
@@ -2012,6 +2006,5 @@ Page({
         this.setData({
             'recipe.satisfyMap': satisfyMap
         })
-        this.closeDialog()
-    }
+    },
 })

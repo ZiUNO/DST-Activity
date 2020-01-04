@@ -9,7 +9,7 @@
             <view wx:for="{{recipe.satisfyMap}}" wx:key="{{index}}" wx:for-item="satis"
                   class="weui-panel weui-panel_access" style="margin-top: 0; border-radius: 35rpx;"
                   hidden="{{!satis.show}}">
-                <view class="weui-panel__hd" catchtap="openDialog">{{satis.satisfy}}</view>
+                <picker bindchange="bindPickerChange" value="{{index}}" range="{{recipe.satisfyMap}}" range-key="satisfy"><view class="weui-panel__hd">{{satis.satisfy}}</view></picker>
                 <view class="weui-panel__bd">
                     <navigator wx:for="{{satis.ids}}" wx:key="ids" wx:for-item="idx" url="."
                                class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
@@ -24,7 +24,7 @@
                                 </view>
                                 <image wx:for="{{recipe.content[idx].kitchen}}" wx:key="{{index}}"
                                        src="{{item.kitchen_url}}"
-                                       style="float: right; display: inline-block; vertical-align: middle;width:23px; height: 23px; margin-right: 45px;"></image>
+                                       style="float: right; display: inline-block; vertical-align: middle;width:23px; height: 23px; {{index == 1 ? 'margin-right: 19px;': 'margin-right: 25px;'}}"></image>
                             </view>
 
                             <view class="weui-media-box__desc">
@@ -77,24 +77,6 @@
                             </view>
                         </view>
                     </navigator>
-                </view>
-            </view>
-        </view>
-        <view class="weui-demo-dialog {{istrue ? 'weui-demo-dialog_show' : ''}}">
-            <view class="weui-mask" catchtap="closeDialog"></view>
-            <view class="weui-actionsheet {{istrue ? 'weui-actionsheet_toggle' : ''}}">
-                <view class="weui-actionsheet__title">
-                    <view class="weui-actionsheet__title-text">{{title}}-{{show}}</view>
-                </view>
-                <view wx:for="{{recipe.satisfyMap}}" wx:key="{{index}}" wx:for-item="satis"
-                      class="weui-actionsheet__menu">
-                    <view id="{{index}}"
-                          class="weui-actionsheet__cell {{satis.show? 'weui-actionsheet__cell_warn': ''}}"
-                          catchtap="recipeChange">{{satis.satisfy}}
-                    </view>
-                </view>
-                <view class="weui-actionsheet__action">
-                    <view class="weui-actionsheet__cell" catchtap="closeDialog">取消</view>
                 </view>
             </view>
         </view>

@@ -22,7 +22,8 @@ Page({
       name: '食谱',
       display: false,
       content: %s,
-      satisfyMap: %s
+      satisfyMap: %s,
+      index: 0
     }
   },
 
@@ -36,28 +37,20 @@ Page({
       show: this.data[options.show].name
     })
   },
-  openDialog: function () {
+  bindPickerChange: function (e) {
     this.setData({
-        istrue: true
+        'recipe.index': e.detail.value
     })
-  },
-  closeDialog: function () {
-    this.setData({
-        istrue: false
-    })
-  },
-  recipeChange: function (event) {
-    let tapId = event.currentTarget.id
+    let tapId = e.detail.value
     let satisfyMap = this.data.recipe.satisfyMap
-    for (let i = 0, len = satisfyMap.length; i<len;++i){
+    for (let i = 0, len = satisfyMap.length; i < len; ++i) {
       satisfyMap[i]['show'] = false
     }
     satisfyMap[tapId]['show'] = true
     this.setData({
       'recipe.satisfyMap': satisfyMap
     })
-    this.closeDialog()
-  } 
+  },
 })
 '''
 
