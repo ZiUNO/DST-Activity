@@ -2,7 +2,7 @@
 <view class="page">
     <view class="page__hd">
         <view class="page__title">[DST-Events] 图鉴</view>
-        <view class="page__desc">Don't Starve Together Event</view>
+        <view class="page__desc">Don't Starve Together Events</view>
     </view>
     <view class="page__bd page__bd_spacing">
         <view class="kind-list">
